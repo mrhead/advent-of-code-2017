@@ -35,7 +35,7 @@ end
 
 require 'minitest/autorun'
 
-class Tests < MiniTest::Unit::TestCase
+class Tests < MiniTest::Test
   def test_example_input
     assert_equal 0, distance(1)
     assert_equal 1, distance(2)

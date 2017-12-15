@@ -11,7 +11,7 @@ end
 
 require "minitest/autorun"
 
-class Tests < MiniTest::Unit::TestCase
+class Tests < MiniTest::Test
   def test_example_input
     input = <<~SPREADSHEET
       5 1 9 5
