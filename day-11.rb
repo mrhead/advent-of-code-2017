@@ -1,29 +1,36 @@
+# https://adventofcode.com/2024/day/11
+#
+# Inspired by: https://www.youtube.com/watch?v=fOqsRz2wPZg
+
 stones = File.read("day-11.in").split(" ").map(&:to_i)
 
-def blink(stones, n = 1)
-  new_stones = []
+def count_stones(stones, n = 1)
+  cache = {}
 
-  stones.each do |stone|
-    if stone == 0
-      new_stones << 1
-    elsif stone.to_s.size.even?
-      stone = stone.to_s
-      n1 = stone[0...stone.size/2]
-      n2 = stone[stone.size/2..]
-      new_stones << n1.to_i
-      new_stones << n2.to_i
-    else
-      new_stones << stone * 2024
-    end
-  end
-
-  if n == 1
-    new_stones
-  else
-    new_stones = blink(new_stones, n - 1)
-  end
-
-  new_stones
+  stones.sum { |stone| expand_and_count(stone, n, cache) }
 end
 
-puts blink(stones, 25).size
+def expand_and_count(stone, n = 1, cache = {})
+  return 1 if n == 0
+
+  cache[[stone, n]] ||= expand(stone).sum { |s| expand_and_count(s, n - 1, cache) }
+end
+
+def expand(stone)
+  return [1] if stone == 0
+
+  if stone.to_s.size.even?
+    return split(stone)
+  end
+
+  [stone * 2024]
+end
+
+def split(number)
+  s = number.to_s
+
+  [s[0...s.size/2].to_i, s[s.size/2..].to_i]
+end
+
+puts count_stones(stones, 25)
+puts count_stones(stones, 75)
