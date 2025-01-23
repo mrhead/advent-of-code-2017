@@ -64,3 +64,30 @@ possible_shortcuts.each do |position, shortcut_distance|
 end
 
 puts part_1
+
+part_2 = 0
+
+distances.each do |position, distance|
+  start_row, start_col = position
+
+  # find all possible cheat end positions
+  for i in -20..20
+    for j in -20..20
+      cheat_distance = i.abs + j.abs
+      next if cheat_distance > 20
+
+      end_row = start_row + i
+      end_col = start_col + j
+
+      # the end position of the check should be on the track
+      next unless distances[[end_row, end_col]]
+
+      time_with_cheat = distance + cheat_distance
+      saved_time = distances[[end_row, end_col]] - time_with_cheat
+
+      part_2 += 1 if saved_time >= 100
+    end
+  end
+end
+
+puts part_2
